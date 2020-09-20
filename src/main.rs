@@ -1,5 +1,7 @@
 // use std::collections::HashMap;
-// use reqwest::header::*;
+use reqwest::header::*;
+
+// https://github.com/settings/tokens/new?description=gt&scopes=public_repo
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -9,11 +11,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         ("sort", "stars"),
         ("order", "desc"),
     ];
-    // let mut headers = HeaderMap::new();
-    // headers.insert(CONTENT_TYPE, "application/json; charset=utf-8".parse().unwrap());
+    let mut headers = HeaderMap::new();
+    headers.insert("Authorization", "token xxxxxxx".parse().unwrap());
     let client = reqwest::Client::new();
     let resp = client.get("https://api.github.com/search/repositories")
         .query(&params)
+        .headers(headers)
         .send()
         .await?;
         // .json::<HashMap<String, String>>()
