@@ -4,14 +4,14 @@ use reqwest::header::*;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    // let resp = reqwest::get("https://httpbin.org/ip")
     let params = [
-        ("q", "created:2020-09-13T00:00:00%2B08:00..2020-09-20T00:00:00%2B08:00"),
+        ("q", "1"),
         ("sort", "stars"),
         ("order", "desc"),
     ];
     let mut headers = HeaderMap::new();
-    headers.insert("Authorization", "xxxxxx".parse().unwrap());
+    // headers.insert("Authorization", "xxxxxx".parse().unwrap());
+    headers.insert("Host", "api.github.com".parse().unwrap());
     // Error: status: 403, when curl returns 200
     // see: https://github.com/seanmonstar/reqwest/issues/918
     headers.insert("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.102 Safari/537.36".parse().unwrap());
@@ -21,8 +21,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .headers(headers)
         .send()
         .await?
-        .text()
+        .json::<serde_json::Value>()
         .await?;
-    println!("{:#?}", resp);
+    println!("{:?}", resp);
     Ok(())
 }
