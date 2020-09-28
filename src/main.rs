@@ -23,6 +23,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .await?
         .json::<serde_json::Value>()
         .await?;
-    println!("{:?}", resp);
+    println!("{:?}", resp["total_count"]);
+    println!("{:?}", resp["items"][0]["full_name"]);
+    println!("{:?}", resp["items"][0]["owner"]["url"]);
     Ok(())
 }
